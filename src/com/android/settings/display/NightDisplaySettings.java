@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,13 +22,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.preference.DropDownPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.TwoStatePreference;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.android.internal.app.NightDisplayController;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.settings.R;
+import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.widget.SwitchBar;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -37,8 +39,10 @@ import java.util.TimeZone;
 /**
  * Settings screen for Night display.
  */
-public class NightDisplaySettings extends SettingsPreferenceFragment
-        implements NightDisplayController.Callback, Preference.OnPreferenceChangeListener {
+public class NightDisplaySettings extends SettingsPreferenceFragment implements
+        NightDisplayController.Callback,
+        Preference.OnPreferenceChangeListener,
+        SwitchBar.OnSwitchChangeListener {
 
     private static final String KEY_NIGHT_DISPLAY_AUTO_MODE = "night_display_auto_mode";
     private static final String KEY_NIGHT_DISPLAY_START_TIME = "night_display_start_time";
@@ -55,6 +59,7 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
     private Preference mStartTimePreference;
     private Preference mEndTimePreference;
     private TwoStatePreference mActivatedPreference;
+    private SwitchBar mSwitchBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,15 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
         });
         mAutoModePreference.setOnPreferenceChangeListener(this);
         mActivatedPreference.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mSwitchBar = ((SettingsActivity) getActivity()).getSwitchBar();
+        mSwitchBar.addOnSwitchChangeListener(this);
+        mSwitchBar.show();
     }
 
     @Override
@@ -158,6 +172,7 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
     @Override
     public void onActivated(boolean activated) {
         mActivatedPreference.setChecked(activated);
+        mSwitchBar.setChecked(activated);
     }
 
     @Override
@@ -195,6 +210,20 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
             return mController.setAutoMode(Integer.parseInt((String) newValue));
         } else if (preference == mActivatedPreference) {
             return mController.setActivated((Boolean) newValue);
+    public void onSwitchChanged(Switch switchView, boolean isChecked) {
+        // Attempt to update the NIGHT_DISPLAY_ACTIVATED setting if necessary.
+        final boolean isActivated = mController.isActivated();
+        if (isActivated != isChecked) {
+            if (mController.setActivated(isChecked)) {
+                switchView.setChecked(isActivated);
+            }
+        }
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mAutoModePreference) {
+            return mController.setAutoMode(Integer.parseInt((String) newValue));
         }
         return false;
     }
