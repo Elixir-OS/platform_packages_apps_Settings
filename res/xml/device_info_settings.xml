@@ -179,11 +179,12 @@
                 settings:allowDividerBelow="true"/>
 
         <!-- JDCTeam Google+ Community shortcut -->
+        <!--
         <Preference android:key="community"
             android:title="@string/community"
             android:summary="@string/community_summary" >
             <intent android:action="android.intent.action.VIEW"
                     android:data="https://plus.google.com/u/0/communities/117218177262334420007" />
-        </Preference>
+        </Preference>-->
 
 </PreferenceScreen>
