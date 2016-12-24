@@ -2,10 +2,11 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Change Log strings -->
+    <!--
     <string name="changelog_title">Changelog</string>
     <string name="changelog_summary">AOSP 7.1.1 changelog</string>
     <string name="changelog_loading">Loading changelog\u2026</string>
-    <string name="changelog_error">Unable to load changelog</string>
+    <string name="changelog_error">Unable to load changelog</string>-->
 
     <!-- Custom Settings -->   
     <!-- Dashboard -->
@@ -35,8 +36,8 @@
     <string name="expanded_desktop_title">Expanded desktop options</string>
 
     <!-- JDCTeam Google+ Community shortcut -->
-    <string name="community">JDCTeam on Google+</string>
-    <string name="community_summary">Join our official community and keep yourself updated about the best software for your device</string>
+    <!--<string name="community">JDCTeam on Google+</string>-->
+    <!--<string name="community_summary">Join our official community and keep yourself updated about the best software for your device</string>-->
 
      <!-- Volume button track change -->
     <string name="volbtn_music_controls_title">Music control</string>
