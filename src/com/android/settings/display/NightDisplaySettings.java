@@ -22,13 +22,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.preference.DropDownPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.TwoStatePreference;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import com.android.internal.app.NightDisplayController;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.settings.R;
+import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
+import com.android.settings.widget.SwitchBar;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -37,8 +39,10 @@ import java.util.TimeZone;
 /**
  * Settings screen for Night display.
  */
-public class NightDisplaySettings extends SettingsPreferenceFragment
-        implements NightDisplayController.Callback, Preference.OnPreferenceChangeListener {
+public class NightDisplaySettings extends SettingsPreferenceFragment implements
+        NightDisplayController.Callback,
+        Preference.OnPreferenceChangeListener,
+        SwitchBar.OnSwitchChangeListener {
 
     private static final String KEY_NIGHT_DISPLAY_AUTO_MODE = "night_display_auto_mode";
     private static final String KEY_NIGHT_DISPLAY_START_TIME = "night_display_start_time";
@@ -217,12 +221,9 @@ public class NightDisplaySettings extends SettingsPreferenceFragment
     }
 
     @Override
-
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mAutoModePreference) {
             return mController.setAutoMode(Integer.parseInt((String) newValue));
-        } else if (preference == mActivatedPreference) {
-            return mController.setActivated((Boolean) newValue);
         }
         return false;
     }
